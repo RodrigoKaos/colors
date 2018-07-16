@@ -1,0 +1,31 @@
+*{
+	margin: 0;
+	padding: 0;
+}
+
+.content {
+	position: absolute;
+	
+	max-width: 332px;
+}
+
+#color {
+	position: absolute;
+	right: 0;
+}
+.pixel {
+	float: left;
+	display: inline-block;
+	
+	height: 10px;
+	width: 10px;
+	
+}
+
+.yellow { background: #FF0 }
+.red 	{ background: #F00 }
+.green 	{ background: #0F0 }
+.blue 	{ background: #00F }
+.black 	{ background: #000 }
+.white 	{ background: #FFF }
+.gray	{ background: #CCC }
