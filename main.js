@@ -9,51 +9,56 @@ Array.from({ length: 1000 }).map(() => {
 
 var pixels = Array.from(d.querySelectorAll('.pixel'));
 
-var colorClass = 'black';
+var colors = [
+	'black',
+	'yellow',
+	'red',
+	'green',
+	'blue',
+	'gray',
+	'white'
+];
+
+activeColor = colors[0];
+
+colors.map( color => {
+	var el = d.createElement('div');
+	el.classList.add(color);
+	el.addEventListener('mousedown', e => activeColor = el.className );
+	d.querySelector('.control').appendChild(el);	
+});
 
 pixels.map( el => {
 
-	let pressed = false;
+	let isPressed = false; //FIX
 	
-	var changeColor = () => {
-		if( pressed ){
-			el.classList.add(colorClass);
+	var changeColor = () => { //FIX REMOVE OLD COLOR SELECTOR
+		if( isPressed ){
+			el.classList.add(activeColor);
 		}
 	};	
 
 	content.addEventListener('mousedown', e => {
-		pressed = true;
+		isPressed = true;
 		el.addEventListener('mouseover', changeColor );
 	});
 	
 	content.addEventListener('mouseup', e => {
-		pressed = false;
+		isPressed = false;
 		el.removeEventListener('mouseover', changeColor );		
 	});
 
 });
 
-// pixels.map( el => 
-// 	el.addEventListener('mouseover', e => el.classList.add('black') ) 
-// );
+//FIX
+// d.querySelector('.save').addEventListener('mouseup', e => {
+// 	// console.log('save');
+// 	var canvas = d.createElement('canvas');
+// 	var ctx = canvas.getContext('2d');
+	
+// 	canvas.width = content.width;
+// 	canvas.height = content.height;
 
-/*
-
-for (var i = 0; i < 1000; i++) {
-	var el = d.createElement('div');
-	el.classList.add('pixel');
-	content.appendChild(el);
-}
-
-var pixels = d.querySelectorAll('.pixel');
-pixels = Array.from(pixels);
-console.log(pixels);
-
-for (var i = pixels.length - 1; i >= 0; i--) {
-	pixels[i].addEventListener('mouseover', function(e){
-		this.classList.add('active');
-		console.log('over');
-	});
-}
-
-*/
+// 	ctx.drawImage(content, 0, 0);
+// 	window.location = canvas.toDataURL("image/png");
+// });
