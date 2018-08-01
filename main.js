@@ -51,14 +51,27 @@ pixels.map( el => {
 });
 
 //FIX
-// d.querySelector('.save').addEventListener('mouseup', e => {
-// 	// console.log('save');
-// 	var canvas = d.createElement('canvas');
-// 	var ctx = canvas.getContext('2d');
-	
-// 	canvas.width = content.width;
-// 	canvas.height = content.height;
+d.querySelector('.save').addEventListener('mouseup', e => {
+	// console.log('save');
 
-// 	ctx.drawImage(content, 0, 0);
-// 	window.location = canvas.toDataURL("image/png");
-// });
+	var canvas = d.createElement('canvas');
+	var ctx = canvas.getContext('2d');
+	
+	canvas.width = content.width;
+	canvas.height = content.height;
+
+	html2canvas(content).then(function(canvas){
+		//ctx.drawImage(content, 0, 0);
+		//image = ;
+		
+		a = window.open();
+		var el = new Image();
+		el.src = canvas.toDataURL("image/png");
+		a.document.body.appendChild(el);
+		//console.log(el);
+	});//TODO save image file
+
+	
+
+	
+});
