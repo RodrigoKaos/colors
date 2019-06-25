@@ -11,14 +11,7 @@ let activeColor = colors[0];
 const content = document.querySelector('.content');
 
 createCanvas();
-
-
-colors.map( color => {
-	let el = document.createElement('div');
-	el.classList.add(color);
-	el.addEventListener('mousedown', e => activeColor = el.className );
-	document.querySelector('.control').appendChild(el);	
-});
+createColorPanel();
 
 Array.from(document.querySelectorAll('.pixel'))
 	.map( el => {
@@ -79,4 +72,27 @@ function createCanvas(){
 	});
 	
 	content.appendChild(canvas);
+}
+
+function createColorPanel(){
+	const colorPanel = document.createElement('div');
+	colorPanel.classList.add('color-panel');
+
+	colors.map( color => {
+		let el = document.createElement('div');
+		el.classList.add(color);
+		colorPanel.appendChild(el);
+	});
+	colorPanel.addEventListener('mousedown', e => selectColor(e));
+	document.querySelector('.control').appendChild(colorPanel);	
+}
+
+function selectColor(event){
+	const el = event.target;
+	const isButton = colors.includes(el.classList.value);
+	console.log(el.classList, isButton);
+	if( isButton ){
+		activeColor = el.className
+		console.log(event.target);
+	}
 }
