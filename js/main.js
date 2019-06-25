@@ -1,13 +1,4 @@
-var d = document,
-content = d.querySelector('.content');
-
-Array.from({ length: 1000 }).map(() => {
-	let el = d.createElement('div');
-	el.classList.add('pixel');
-	content.appendChild(el);
-});
-
-var colors = [
+const colors = [
 	'black',
 	'yellow',
 	'red',
@@ -16,22 +7,25 @@ var colors = [
 	'gray',
 	'white'
 ];
-
 let activeColor = colors[0];
+const content = document.querySelector('.content');
+
+createCanvas();
+
 
 colors.map( color => {
-	let el = d.createElement('div');
+	let el = document.createElement('div');
 	el.classList.add(color);
 	el.addEventListener('mousedown', e => activeColor = el.className );
-	d.querySelector('.control').appendChild(el);	
+	document.querySelector('.control').appendChild(el);	
 });
 
-Array.from(d.querySelectorAll('.pixel'))
+Array.from(document.querySelectorAll('.pixel'))
 	.map( el => {
 
 		let isPressed = false; //FIX
 		
-		var changeColor = () => {
+		const changeColor = () => {
 			if( isPressed ){
 				let aux = el.classList.value.split(" ");
 				
@@ -57,10 +51,10 @@ Array.from(d.querySelectorAll('.pixel'))
 
 	});
 
-d.querySelector('.save').addEventListener('click', e => {
+document.querySelector('.save').addEventListener('click', e => {
 
-	var canvas = d.createElement('canvas');
-	var ctx = canvas.getContext('2d');
+	const canvas = document.createElement('canvas');
+	const ctx = canvas.getContext('2d');
 	
 	canvas.width = content.width;
 	canvas.height = content.height;
@@ -73,3 +67,16 @@ d.querySelector('.save').addEventListener('click', e => {
 	
 	});	
 });
+
+function createCanvas(){
+	const canvas = document.createElement('div');
+	canvas.classList.add('canvas');
+	
+	Array.from({ length: 1000 }).map(() => {
+		let el = document.createElement('div');
+		el.classList.add('pixel');
+		canvas.appendChild(el);
+	});
+	
+	content.appendChild(canvas);
+}
