@@ -11,7 +11,8 @@ function createCanvasDiv(){
 	const canvas = document.createElement('div');
 	canvas.classList.add('canvas');
 	
-	Array.from({ length: 1000 }).map(() => {
+	const length = 8 * 8;
+	Array.from({ length: length }).map(() => {
 		let el = document.createElement('div');
 		el.classList.add('pixel');
 		canvas.appendChild(el);
