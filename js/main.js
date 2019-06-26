@@ -1,67 +1,13 @@
-const colors = [
-	'black',
-	'yellow',
-	'red',
-	'green',
-	'blue',
-	'gray',
-	'white'
-];
-let activeColor = colors[0];
 const content = document.querySelector('.content');
+const colors = ['black', 'yellow', 'red', 'green', 'blue', 'gray', 'white'];
+let activeColor = colors[0];
+let isPressed = false;
 
-createCanvas();
+const canvasDiv = createCanvasDiv();
 createColorPanel();
+setListeners();
 
-Array.from(document.querySelectorAll('.pixel'))
-	.map( el => {
-
-		let isPressed = false; //FIX
-		
-		const changeColor = () => {
-			if( isPressed ){
-				let aux = el.classList.value.split(" ");
-				
-				if( aux.length > 1 && [aux].pop() != activeColor ){
-					aux.pop();
-					el.classList.value = aux.join(" ");
-				}
-
-				el.classList.add(activeColor);
-
-			}
-		};	
-
-		content.addEventListener('mousedown', e => {
-			isPressed = true;
-			el.addEventListener('mouseover', changeColor );
-		});
-		
-		content.addEventListener('mouseup', e => {
-			isPressed = false;
-			el.removeEventListener('mouseover', changeColor );		
-		});
-
-	});
-
-document.querySelector('.save').addEventListener('click', e => {
-
-	const canvas = document.createElement('canvas');
-	const ctx = canvas.getContext('2d');
-	
-	canvas.width = content.width;
-	canvas.height = content.height;
-
-	html2canvas(content).then( canvas => {		
-		
-		fetch(canvas.toDataURL("image/png"))
-		.then(res => res.blob())
-		.then(blob => saveAs(blob, 'img.png'));
-	
-	});	
-});
-
-function createCanvas(){
+function createCanvasDiv(){
 	const canvas = document.createElement('div');
 	canvas.classList.add('canvas');
 	
@@ -72,6 +18,7 @@ function createCanvas(){
 	});
 	
 	content.appendChild(canvas);
+	return canvas;
 }
 
 function createColorPanel(){
@@ -83,16 +30,65 @@ function createColorPanel(){
 		el.classList.add(color);
 		colorPanel.appendChild(el);
 	});
-	colorPanel.addEventListener('mousedown', e => selectColor(e));
 	document.querySelector('.control').appendChild(colorPanel);	
 }
 
-function selectColor(event){
+function selectColor(){
+	const event = window.event;
 	const el = event.target;
 	const isButton = colors.includes(el.classList.value);
-	console.log(el.classList, isButton);
 	if( isButton ){
 		activeColor = el.className
-		console.log(event.target);
+		//TODO: add active state to color button...
 	}
+}
+
+function changeColor(){
+	
+	if(!isPressed){
+		return;
+	}
+
+	const event = window.event;
+	const element = event.target;
+	const aux = element.classList.value.split(" ");
+
+	if( aux.length > 1 && [aux].pop() != activeColor ){
+		aux.pop();
+		element.classList.value = aux.join(" ");
+	}
+	element.classList.add(activeColor);
+}
+
+function handleSave(){
+	const canvas = document.createElement('canvas');	
+	canvas.width = content.width;
+	canvas.height = content.height;
+	saveImage(content, canvas);	
+}
+
+function saveImage(content, canvas){
+	html2canvas(content).then( canvas => {		
+		fetch(canvas.toDataURL("image/png"))
+		.then(res => res.blob())
+		.then(blob => saveAs(blob, 'img.png'));
+	});
+}
+
+function setListeners(){
+	document.querySelector('.color-panel').addEventListener('mousedown', selectColor);
+	document.querySelector('.save').addEventListener('click', handleSave);
+
+	canvasDiv.addEventListener('mousedown', () => {
+		isPressed = true;
+		canvasDiv.addEventListener('mousemove',changeColor);
+	});
+	
+	document.addEventListener('mouseup', () => {
+		isPressed = false;
+		canvasDiv.removeEventListener('mousemove', changeColor);
+	});
+	
+	canvasDiv.addEventListener('mouseleave', () => isPressed = false);
+	canvasDiv.addEventListener('dragend', () => isPressed = false);
 }
